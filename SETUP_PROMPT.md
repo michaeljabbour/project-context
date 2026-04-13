@@ -4,56 +4,47 @@ Copy and paste this prompt into your AI coding session to generate customized pr
 
 ---
 
-## Full Setup (All Tiers)
+## Full Setup
 
 ```
-Read the templates in project-context/templates/ and set up project coordination
-files for this project.
-
-For each template:
-1. Read the template to understand its structure and purpose.
-2. Analyze the codebase to gather relevant information.
-3. Generate a customized version at the project root with placeholders filled in.
-
-Work through the tiers in order:
-
-Tier 1 (generate first):
-- PROJECT_CONTEXT.md -- Fill in project name, phase, version, team, and milestone.
-- GLOSSARY.md -- Identify key domain terms from the codebase and document them.
-
-Tier 2 (generate next):
-- STRUCTURE.md -- Map the actual directory layout and document naming conventions.
-- WAYSOFWORKING.md -- Document build/test/deploy workflows and any known failure patterns.
-- HANDOFF.md -- Initialize with current project state as the first handoff entry.
-
-Tier 3 (ask me before generating):
-- PROVENANCE.md -- Document key architectural decisions visible in the codebase.
-- EXPERIMENT_JOURNAL.md -- Initialize empty, ready for first experiment entry.
-
-Extension (skip unless I ask):
-- CLAIMS_TRACKER.md -- Only for projects with patent/IP tracking needs.
-
-After generating each file, show me a brief summary of what you filled in so I can
-correct anything before moving to the next tier.
+Read project-context/README.md first to understand the coordination file
+system — its tiers, cognitive modes, and maintenance expectations. Then read
+all the templates in project-context/templates/. Scan the codebase to
+understand the project — its structure, language, dependencies, and current
+state. Look for any existing files that already serve coordination functions
+(READMEs, CONTRIBUTING guides, decision logs, changelogs, onboarding docs,
+architecture docs, glossaries, etc.) and consolidate their relevant content
+into the new format rather than starting from scratch. Generate customized
+versions of each coordination file at the project root — do not modify
+anything inside project-context/templates/ (those are the versioned source of
+truth). Start with PROJECT_CONTEXT.md and GLOSSARY.md (Tier 1), then
+STRUCTURE.md, WAYSOFWORKING.md, and HANDOFF.md (Tier 2). Ask me before
+generating Tier 3 files (PROVENANCE.md, EXPERIMENT_JOURNAL.md) or the
+optional CLAIMS_TRACKER.md.
 ```
 
 ---
 
 ## Quick Setup (Tier 1 Only)
 
-For a minimal start, use this shorter prompt:
+For a minimal start:
 
 ```
-Read project-context/templates/PROJECT_CONTEXT.md and project-context/templates/GLOSSARY.md.
-Analyze the codebase and generate customized versions of both files at the project root.
-Fill in all placeholders based on what you find.
+Read project-context/README.md to understand the coordination file system.
+Then read project-context/templates/PROJECT_CONTEXT.md and
+project-context/templates/GLOSSARY.md. Scan the codebase and any existing
+coordination files (READMEs, glossaries, onboarding docs) and generate
+customized versions of both at the project root. Do not modify anything
+inside project-context/templates/.
 ```
 
 Then add Tier 2 files when you're ready:
 
 ```
 Read project-context/templates/STRUCTURE.md, project-context/templates/WAYSOFWORKING.md,
-and project-context/templates/HANDOFF.md. Generate customized versions at the project root.
+and project-context/templates/HANDOFF.md. Scan the codebase and any existing docs
+(CONTRIBUTING guides, architecture docs, decision logs) and generate customized versions
+at the project root, consolidating relevant existing content into the new format.
 ```
 
 ---

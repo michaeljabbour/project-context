@@ -21,10 +21,20 @@ git submodule add https://github.com/michaeljabbour/project-context.git project-
 Open an AI coding session and use the prompt in [`SETUP_PROMPT.md`](SETUP_PROMPT.md), or simply:
 
 ```
-Read the templates in project-context/templates/ and generate customized
-coordination files for this project at the repo root. Start with
-PROJECT_CONTEXT.md and GLOSSARY.md, then STRUCTURE.md, WAYSOFWORKING.md,
-and HANDOFF.md.
+Read project-context/README.md first to understand the coordination file
+system — its tiers, cognitive modes, and maintenance expectations. Then read
+all the templates in project-context/templates/. Scan the codebase to
+understand the project — its structure, language, dependencies, and current
+state. Look for any existing files that already serve coordination functions
+(READMEs, CONTRIBUTING guides, decision logs, changelogs, onboarding docs,
+architecture docs, glossaries, etc.) and consolidate their relevant content
+into the new format rather than starting from scratch. Generate customized
+versions of each coordination file at the project root — do not modify
+anything inside project-context/templates/ (those are the versioned source of
+truth). Start with PROJECT_CONTEXT.md and GLOSSARY.md (Tier 1), then
+STRUCTURE.md, WAYSOFWORKING.md, and HANDOFF.md (Tier 2). Ask me before
+generating Tier 3 files (PROVENANCE.md, EXPERIMENT_JOURNAL.md) or the
+optional CLAIMS_TRACKER.md.
 ```
 
 **3. Tell your agent to read the files.** At the start of each session:
