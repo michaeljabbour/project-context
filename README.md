@@ -27,61 +27,69 @@ read all the templates in project-context/templates/. Scan the codebase
 to understand the project — its structure, language, dependencies, and
 current state. Look for any existing files that already serve coordination
 functions (READMEs, CONTRIBUTING guides, decision logs, changelogs,
-onboarding docs, architecture docs, glossaries, etc.) and consolidate
-their relevant content into the new format rather than starting from
-scratch. Generate customized versions of each coordination file inside
-the project-context/ directory (alongside the templates/ folder) — do
-not modify anything inside project-context/templates/ (those are the
-versioned source of truth). Start with PROJECT_CONTEXT.md and GLOSSARY.md
-(Tier 1), then STRUCTURE.md, WAYSOFWORKING.md, and HANDOFF.md (Tier 2).
-Ask me before generating Tier 3 files (PROVENANCE.md,
-EXPERIMENT_JOURNAL.md) or the optional CLAIMS_TRACKER.md.
+onboarding docs, architecture docs, glossaries, AGENTS.md, etc.) and
+consolidate their relevant content into the new format rather than
+starting from scratch. Generate customized versions of each coordination
+file inside the project-context/ directory (alongside the templates/
+folder) — do not modify anything inside project-context/templates/
+(those are the versioned source of truth). Start with PROJECT_CONTEXT.md
+and GLOSSARY.md (Tier 1), then STRUCTURE.md, WAYSOFWORKING.md, and
+HANDOFF.md (Tier 2). Ask me before generating Tier 3 files
+(PROVENANCE.md, EXPERIMENT_JOURNAL.md) or the optional
+CLAIMS_TRACKER.md. Finally, generate AGENTS.md at the project root
+(not inside project-context/) — this is the entry point that tells
+any AI agent about the coordination system and how to maintain it.
 ```
 
-**3. Tell your agent to read the files.** At the start of each session:
-
-> "Read project-context/PROJECT_CONTEXT.md and project-context/GLOSSARY.md before starting."
-
-That's it. The agent now has project memory.
+**3. That's it.** The generated `AGENTS.md` at your project root tells any AI agent to read the coordination files automatically. No need to repeat instructions each session.
 
 ---
 
 ## How It's Organized
 
 ```
-project-context/                    # Cloned into your repo
-├── README.md                       # You are here
-├── SETUP_PROMPT.md                 # Ready-to-paste prompts
-├── CHANGELOG.md                    # Template version history
-├── LICENSE                         # MIT
-├── templates/                      # Versioned source of truth — don't edit
-│   ├── PROJECT_CONTEXT.md
-│   ├── GLOSSARY.md
-│   ├── STRUCTURE.md
-│   ├── WAYSOFWORKING.md
-│   ├── HANDOFF.md
-│   ├── PROVENANCE.md
-│   ├── EXPERIMENT_JOURNAL.md
-│   └── CLAIMS_TRACKER.md
-│
-│   # After running the setup prompt, your generated files appear here:
-├── PROJECT_CONTEXT.md              # ← Generated, project-specific
-├── GLOSSARY.md                     # ← Generated, project-specific
-├── STRUCTURE.md                    # ← etc.
-├── WAYSOFWORKING.md
-├── HANDOFF.md
-├── PROVENANCE.md
-├── EXPERIMENT_JOURNAL.md
-└── CLAIMS_TRACKER.md               # (optional)
+your-project/
+├── AGENTS.md                       # ← Generated at root (entry point for all agents)
+└── project-context/                # Cloned into your repo
+    ├── README.md                   # You are here
+    ├── SETUP_PROMPT.md             # Ready-to-paste prompts
+    ├── CHANGELOG.md                # Template version history
+    ├── LICENSE                     # MIT
+    ├── templates/                  # Versioned source of truth — don't edit
+    │   ├── AGENTS.md              # Template for root-level agent instructions
+    │   ├── PROJECT_CONTEXT.md
+    │   ├── GLOSSARY.md
+    │   ├── STRUCTURE.md
+    │   ├── WAYSOFWORKING.md
+    │   ├── HANDOFF.md
+    │   ├── PROVENANCE.md
+    │   ├── EXPERIMENT_JOURNAL.md
+    │   └── CLAIMS_TRACKER.md
+    │
+    │   # After running the setup prompt, generated files appear here:
+    ├── PROJECT_CONTEXT.md          # ← Generated, project-specific
+    ├── GLOSSARY.md                 # ← Generated, project-specific
+    ├── STRUCTURE.md                # ← etc.
+    ├── WAYSOFWORKING.md
+    ├── HANDOFF.md
+    ├── PROVENANCE.md
+    ├── EXPERIMENT_JOURNAL.md
+    └── CLAIMS_TRACKER.md           # (optional)
 ```
 
-**Templates** are the versioned reference — they never change per-project. **Generated files** (at the project-context/ root) are your project-specific living documents, maintained session to session. The same filename in both places is intentional: templates are the schema, generated files are the instances.
+**Templates** are the versioned reference — they never change per-project. **Generated files** (at the project-context/ root, plus AGENTS.md at the project root) are your project-specific living documents, maintained session to session. AGENTS.md is the only file at the project root — it's the universal entry point that tells any AI agent about the coordination system and the continuous improvement contract.
 
 ---
 
 ## The Files
 
 Eight templates, organized into tiers by how often agents should read them.
+
+### Tier 0 -- Root Entry Point
+
+| File | Purpose |
+|------|---------|
+| **AGENTS.md** | Lives at the **project root** (not in project-context/). Universal entry point for any AI agent. Contains the session protocol and continuous improvement contract — the instructions that make agents automatically maintain and improve all the other files as they work. |
 
 ### Tier 1 -- Always Read (<1000 tokens combined)
 
@@ -119,6 +127,7 @@ These files aren't organized by topic -- they're organized by **cognitive mode**
 
 | File | Thinking Mode | Agent's Question |
 |------|--------------|-----------------|
+| AGENTS.md | Self-regulation | "What are my obligations?" |
 | PROJECT_CONTEXT | Orientation | "Where am I?" |
 | GLOSSARY | Semantic grounding | "What do these terms mean?" |
 | STRUCTURE | Spatial reasoning | "Where do things go?" |
@@ -146,6 +155,7 @@ The value depends entirely on keeping them current. Stale context is worse than 
 
 | File | When to Update |
 |------|---------------|
+| AGENTS.md | Rarely — only when session protocol or contract changes |
 | PROJECT_CONTEXT.md | Every session (current phase, milestone) |
 | GLOSSARY.md | When new terms emerge |
 | HANDOFF.md | End of every session (rewrite completely) |

@@ -9,6 +9,32 @@ This project uses [Semantic Versioning](https://semver.org/):
 
 ---
 
+## [2.1.0] - 2026-04-13
+
+### Added
+- **AGENTS.md template** (Tier 0) -- root-level entry point for any AI agent
+  - Session protocol (what to read on start, what to update on end)
+  - Continuous improvement contract (when to update which coordination file)
+  - Cross-platform notes (Claude Code, Cursor, GitHub Copilot)
+- `.gitignore` for generated coordination files (project-specific, not part of template repo)
+
+### Changed
+- Setup prompt now generates AGENTS.md at the project root as the final step
+- Quick setup prompt includes AGENTS.md generation
+- Session end prompt references the continuous improvement contract
+- README updated with AGENTS.md documentation and Tier 0 designation
+
+---
+
+## [2.0.0] - 2026-04-13
+
+### Changed
+- **Breaking:** Generated files now go inside project-context/ instead of project root
+- All prompts updated to use project-context/ paths
+- Added .gitignore for generated files
+
+---
+
 ## [1.0.0] - 2026-04-13
 
 ### Added
