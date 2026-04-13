@@ -1,127 +1,173 @@
-# Project Coordination Templates
+# Project Context
 
-A set of markdown files that give AI agents persistent project memory across sessions.
+Markdown templates that give AI agents persistent project memory across sessions.
 
-These templates provide structured context that agents read at the start of each session, eliminating the recurring cost of re-explaining your project, its terminology, its decisions, and its current state. They work with any AI coding assistant but are optimized for multi-session workflows where continuity matters.
+Drop this into any repo, run one prompt, and your agent knows your project structure, terminology, decisions, failure patterns, and current state -- every session, without re-explaining.
+
+## Quick Start
+
+**1. Add to your project:**
+
+```bash
+# Option A: Clone into your repo
+git clone https://github.com/michaeljabbour/project-context.git project-context
+
+# Option B: Add as a submodule (gets updates when you pull)
+git submodule add https://github.com/michaeljabbour/project-context.git project-context
+```
+
+**2. Generate your project's coordination files:**
+
+Open an AI coding session and use the prompt in [`SETUP_PROMPT.md`](SETUP_PROMPT.md), or simply:
+
+```
+Read the templates in project-context/templates/ and generate customized
+coordination files for this project at the repo root. Start with
+PROJECT_CONTEXT.md and GLOSSARY.md, then STRUCTURE.md, WAYSOFWORKING.md,
+and HANDOFF.md.
+```
+
+**3. Tell your agent to read the files.** At the start of each session:
+
+> "Read PROJECT_CONTEXT.md and GLOSSARY.md before starting."
+
+That's it. The agent now has project memory.
+
+---
+
+## What's in the Box
+
+```
+project-context/
+├── README.md              # You are here
+├── SETUP_PROMPT.md        # Exact prompt to generate your project files
+├── CHANGELOG.md           # Version history
+├── LICENSE                # MIT
+└── templates/             # Source of truth -- versioned, don't edit per-project
+    ├── PROJECT_CONTEXT.md
+    ├── GLOSSARY.md
+    ├── STRUCTURE.md
+    ├── WAYSOFWORKING.md
+    ├── HANDOFF.md
+    ├── PROVENANCE.md
+    ├── EXPERIMENT_JOURNAL.md
+    └── CLAIMS_TRACKER.md
+```
+
+The `templates/` directory is the reference. Your agent reads these and generates **customized copies at your project root** -- those are the living documents you maintain session to session.
+
+---
+
+## The Files
+
+Eight templates, organized into tiers by how often agents should read them.
+
+### Tier 1 -- Always Read (<1000 tokens combined)
+
+| File | Purpose |
+|------|---------|
+| **PROJECT_CONTEXT.md** | Current project state at a glance: phase, version, team, active milestone. Cheap to load, answers "where am I?" instantly. |
+| **GLOSSARY.md** | Terminology contract. "We say X, we mean Y, we do NOT mean Z." Prevents agents from silently substituting synonyms that blur important distinctions. |
+
+### Tier 2 -- Read When Working
+
+| File | Purpose |
+|------|---------|
+| **STRUCTURE.md** | Directory layout, naming conventions, routing table ("I have X, where does it go?"). Prevents files from being created in wrong locations. |
+| **WAYSOFWORKING.md** | Session loop, proven workflows, named failure patterns (symptom/cause/fix), verification commands, error recovery protocol. The operational playbook. |
+| **HANDOFF.md** | Session continuity. What happened last, what's blocked, what to do next. Rewritten at the end of every session. Highest-impact single file if you adopt only one. |
+
+### Tier 3 -- Read When Investigating
+
+| File | Purpose |
+|------|---------|
+| **PROVENANCE.md** | Decision journal. Why things are the way they are, what alternatives were considered, what was tried and abandoned. Prevents agents from re-proposing rejected approaches. |
+| **EXPERIMENT_JOURNAL.md** | Scientific record. Hypothesis before results, raw data in tables, root cause analysis, running summary. Prevents confabulation. |
+
+### Extension -- Optional
+
+| File | Purpose |
+|------|---------|
+| **CLAIMS_TRACKER.md** | Patent/IP tracking. Claims, prior art maps, prosecution timeline. Only for projects heading toward filings. |
 
 ---
 
 ## Why It Works
 
-These files are not organized by topic. They are organized by **cognitive mode** -- each file maps to a different kind of thinking an agent needs to do. This is why the system works better than a single large README: agents load only the thinking mode they need for the current task.
+These files aren't organized by topic -- they're organized by **cognitive mode**. Each maps to a different kind of thinking an agent does:
 
-### Cognitive-mode partitioning
+| File | Thinking Mode | Agent's Question |
+|------|--------------|-----------------|
+| PROJECT_CONTEXT | Orientation | "Where am I?" |
+| GLOSSARY | Semantic grounding | "What do these terms mean?" |
+| STRUCTURE | Spatial reasoning | "Where do things go?" |
+| WAYSOFWORKING | Procedural reasoning | "How do I work here?" |
+| HANDOFF | Session continuity | "What just happened?" |
+| PROVENANCE | Causal reasoning | "Why was it done this way?" |
+| EXPERIMENT_JOURNAL | Scientific reasoning | "What was tried?" |
+| CLAIMS_TRACKER | Strategic reasoning | "What do we protect?" |
 
-The eight files correspond to distinct reasoning patterns:
+This means agents load **only the context relevant to their current task** instead of a monolithic README. Less noise in the context window, more accurate behavior, and knowledge that compounds across sessions instead of evaporating.
 
-- **Orientation** (PROJECT_CONTEXT.md) -- Where am I? What phase is this project in?
-- **Semantic grounding** (GLOSSARY.md) -- What do these terms mean, precisely?
-- **Spatial reasoning** (STRUCTURE.md) -- Where do things go in this codebase?
-- **Procedural reasoning** (WAYSOFWORKING.md) -- How should I work here?
-- **Session continuity** (HANDOFF.md) -- What just happened? What's next?
-- **Causal reasoning** (PROVENANCE.md) -- Why were these decisions made?
-- **Scientific reasoning** (EXPERIMENT_JOURNAL.md) -- What was tried? What was learned?
-- **Strategic reasoning** (CLAIMS_TRACKER.md) -- What legal/IP constraints apply?
+**Three mechanisms drive the compounding:**
 
-### The terminology table as semantic contract
+1. **The terminology table** (GLOSSARY.md) acts as a type system for natural language. The "Does NOT Mean" column constrains interpretation the way a type signature constrains code.
 
-The GLOSSARY.md file acts as a type system for natural language. Its "Does NOT Mean" column is the critical feature -- it prevents agents from silently substituting synonyms that blur important distinctions. When an agent reads that "module" means X and does not mean Y, it constrains interpretation the same way a type signature constrains code.
+2. **Named failure patterns** (WAYSOFWORKING.md) create institutional memory. An agent in session 12 benefits from the pain of session 3 without repeating it.
 
-### Named failure patterns as institutional memory
-
-WAYSOFWORKING.md captures named failure patterns (anti-patterns, known gotchas, things that look right but break). These create institutional memory that persists across sessions. An agent that reads "never do X because it causes Y" in session 12 benefits from the pain of session 3 without repeating it.
-
-### Session loop as state machine
-
-The session workflow defined in WAYSOFWORKING.md acts as a state machine: read context, check handoff, do work, update files, write handoff. This loop prevents drift by making each session accountable to both the previous and next session.
-
-### Hypothesis-before-results discipline
-
-EXPERIMENT_JOURNAL.md requires writing the hypothesis before recording results. This prevents confabulation -- the common failure mode where agents retroactively construct explanations that fit observed outcomes rather than testing genuine predictions.
-
-### Feedback loops
-
-The files form a closed loop: experiments produce findings, findings inform decisions (PROVENANCE), decisions shape procedures (WAYSOFWORKING), and procedures guide better experiments. Knowledge compounds across sessions instead of evaporating.
-
----
-
-## File Reference
-
-| File | Tier | Cognitive Mode | When to Read | When to Update |
-|------|------|---------------|--------------|----------------|
-| PROJECT_CONTEXT.md | 1 - Always | Orientation | Every session start | Every session |
-| GLOSSARY.md | 1 - Always | Semantic grounding | Every session start | When new terms emerge |
-| STRUCTURE.md | 2 - Working | Spatial reasoning | When writing or moving code | When directory layout changes |
-| WAYSOFWORKING.md | 2 - Working | Procedural reasoning | When starting implementation | When patterns break or improve |
-| HANDOFF.md | 2 - Working | Session continuity | Every session start | Every session end |
-| PROVENANCE.md | 3 - Investigating | Causal reasoning | When questioning a decision | When decisions are made |
-| EXPERIMENT_JOURNAL.md | 3 - Investigating | Scientific reasoning | When designing experiments | After every experiment run |
-| CLAIMS_TRACKER.md | Extension | Strategic reasoning | When IP questions arise | When claims evolve |
-
-### Tier explanation
-
-- **Tier 1 (Always Read, <1000 tokens combined):** PROJECT_CONTEXT.md and GLOSSARY.md. These are cheap to load and orient the agent immediately. Read them at the start of every session, no exceptions.
-- **Tier 2 (Read When Working):** STRUCTURE.md, WAYSOFWORKING.md, and HANDOFF.md. Load these when the agent is about to write code, make changes, or needs to know what happened last session.
-- **Tier 3 (Read When Investigating):** PROVENANCE.md and EXPERIMENT_JOURNAL.md. Load these when the agent needs to understand why something is the way it is or what has already been tried.
-- **Extension (Domain-Specific, Optional):** CLAIMS_TRACKER.md. Only relevant for projects with patent or IP tracking needs.
-
----
-
-## Getting Started
-
-### Path A -- Manual Setup
-
-1. Copy the coordination template files to your project root.
-2. Open each file and fill in the `[bracketed placeholders]` with your project's specifics.
-3. At the start of each AI session, tell your agent: "Read PROJECT_CONTEXT.md and GLOSSARY.md before starting any work."
-4. At the end of each session, update HANDOFF.md with what was accomplished and what comes next.
-
-### Path B -- Amplifier Auto-Setup (recommended)
-
-1. Copy the `project-context/` directory to your repository root.
-2. Open an Amplifier session and use this prompt:
-
-```
-Read all the templates in project-context/ and set up project coordination
-files for this project. Analyze the codebase to understand the project, then
-generate customized versions of each coordination file at the project root.
-Start with PROJECT_CONTEXT.md and GLOSSARY.md (Tier 1), then STRUCTURE.md,
-WAYSOFWORKING.md, and HANDOFF.md (Tier 2). Ask me before generating Tier 3
-files (PROVENANCE.md, EXPERIMENT_JOURNAL.md) or the optional CLAIMS_TRACKER.md.
-```
-
-3. Review the generated files and adjust anything the agent got wrong.
-4. Commit the coordination files to your repo so they persist.
+3. **Feedback loops** between files: experiments produce findings, findings inform decisions (PROVENANCE), decisions shape procedures (WAYSOFWORKING), procedures guide better experiments.
 
 ---
 
 ## Maintaining the Files
 
-The value of these files depends entirely on keeping them current. Stale context is worse than no context because it misleads with confidence.
+The value depends entirely on keeping them current. Stale context is worse than no context.
 
-| File | Update Frequency | What to Update |
-|------|-----------------|----------------|
-| PROJECT_CONTEXT.md | Every session | Current phase, active milestone, active decisions |
-| GLOSSARY.md | When new terms emerge | New terms, refined definitions, new anti-definitions |
-| HANDOFF.md | End of every session | Rewrite completely with current session's state |
-| STRUCTURE.md | When layout changes | New directories, moved files, changed conventions |
-| WAYSOFWORKING.md | When patterns break or improve | New failure patterns, updated procedures, revised workflows |
-| PROVENANCE.md | When decisions are made | New decision records with context and alternatives considered |
-| EXPERIMENT_JOURNAL.md | After every experiment | New experiment entry with hypothesis, method, results, conclusion |
-| CLAIMS_TRACKER.md | When claims evolve | Claim status changes, office action responses, new claims |
+| File | When to Update |
+|------|---------------|
+| PROJECT_CONTEXT.md | Every session (current phase, milestone) |
+| GLOSSARY.md | When new terms emerge |
+| HANDOFF.md | End of every session (rewrite completely) |
+| STRUCTURE.md | When directory layout changes |
+| WAYSOFWORKING.md | When something breaks or a better pattern emerges |
+| PROVENANCE.md | When decisions are made |
+| EXPERIMENT_JOURNAL.md | After every experiment |
+| CLAIMS_TRACKER.md | When claims evolve |
 
-**Rule of thumb:** If you would re-explain something to a new team member, it belongs in one of these files.
+**Rule of thumb:** If you'd re-explain it to a new team member, it belongs in one of these files.
 
 ---
 
-## Amplifier Integration Tips
+## Updating Templates
 
-- **Always start with Tier 1.** Tell agents "Read PROJECT_CONTEXT.md and GLOSSARY.md before starting any work." This costs under 1000 tokens and prevents the most common failure modes (wrong assumptions about project state, terminology drift).
+This repo is versioned with [semantic versioning](https://semver.org/). To get template updates:
 
-- **Use @-mentions for selective loading.** In Amplifier, agents can @-mention specific files. The tiered system means agents can load approximately 1000 tokens for orientation, then selectively load STRUCTURE.md, WAYSOFWORKING.md, or other files based on the task at hand.
+```bash
+# If cloned directly
+cd project-context && git pull
 
-- **HANDOFF.md is the highest-impact addition.** If you adopt only one practice from this system, make it this: update HANDOFF.md at the end of every session. It eliminates the "where was I?" problem that wastes the first 10 minutes of every new session.
+# If using a submodule
+git submodule update --remote project-context
+```
 
-- **Let agents update the files.** These files are living documents. When an agent discovers a new term, a new failure pattern, or makes a decision, ask it to update the relevant coordination file before ending the session.
+Updates to templates don't affect your project's customized files at root level. Templates are the reference; your root-level files are the living documents.
 
-- **Commit the files.** These are project artifacts, not scratch notes. Version-controlling them means you can see how project understanding evolved over time and revert if an agent introduces errors.
+See [CHANGELOG.md](CHANGELOG.md) for what changed per version.
+
+---
+
+## Future
+
+This is currently a set of templates. Planned evolution:
+
+- **Amplifier skill** -- loadable via `load_skill()` for automatic discovery
+- **Amplifier bundle** -- context injection with agent directives and tiered auto-loading
+- **Agent-maintained updates** -- agents automatically update coordination files as they work
+
+Contributions and feedback welcome via issues.
+
+---
+
+## License
+
+[MIT](LICENSE)
