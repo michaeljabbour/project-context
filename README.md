@@ -2,7 +2,9 @@
 
 Markdown templates that give AI agents persistent project memory across sessions.
 
-Drop this into any repo, run one prompt, and your agent knows your project structure, terminology, decisions, failure patterns, and current state -- every session, without re-explaining.
+Drop this into any repo, run one prompt, and your agent knows your project structure, terminology, decisions, failure patterns, and current state — every session, without re-explaining.
+
+Works with Amplifier, Claude Code, Codex, Cursor, Windsurf, GitHub Copilot, and any agent that reads `AGENTS.md`.
 
 ## Quick Start
 
@@ -16,9 +18,9 @@ git clone https://github.com/michaeljabbour/project-context.git project-context
 git submodule add https://github.com/michaeljabbour/project-context.git project-context
 ```
 
-**2. Generate your project's coordination files:**
+**2. Generate your project's coordination files.**
 
-Open an AI coding session and use the prompt in [`SETUP_PROMPT.md`](SETUP_PROMPT.md), or:
+Open an AI coding session and give it the prompt from [`SETUP_PROMPT.md`](SETUP_PROMPT.md):
 
 ```
 Read project-context/README.md first to understand the coordination file
@@ -43,20 +45,18 @@ any AI agent about the coordination system and how to maintain it.
 
 **3. That's it.** The generated `AGENTS.md` at your project root tells any AI agent to read the coordination files automatically. No need to repeat instructions each session.
 
+> **For Claude Code users:** Claude Code reads `CLAUDE.md` rather than `AGENTS.md`. Create a symlink so both work: `ln -s AGENTS.md CLAUDE.md`
+
 ---
 
 ## How It's Organized
 
 ```
 your-project/
-├── AGENTS.md                       # ← Generated at root (entry point for all agents)
+├── AGENTS.md                       # ← Generated at root (auto-read by most AI agents)
 └── project-context/                # Cloned into your repo
-    ├── README.md                   # You are here
-    ├── SETUP_PROMPT.md             # Ready-to-paste prompts
-    ├── CHANGELOG.md                # Template version history
-    ├── LICENSE                     # MIT
     ├── templates/                  # Versioned source of truth — don't edit
-    │   ├── AGENTS.md              # Template for root-level agent instructions
+    │   ├── AGENTS.md
     │   ├── PROJECT_CONTEXT.md
     │   ├── GLOSSARY.md
     │   ├── STRUCTURE.md
@@ -66,10 +66,10 @@ your-project/
     │   ├── EXPERIMENT_JOURNAL.md
     │   └── CLAIMS_TRACKER.md
     │
-    │   # After running the setup prompt, generated files appear here:
+    │   # After setup, generated files appear here:
     ├── PROJECT_CONTEXT.md          # ← Generated, project-specific
-    ├── GLOSSARY.md                 # ← Generated, project-specific
-    ├── STRUCTURE.md                # ← etc.
+    ├── GLOSSARY.md
+    ├── STRUCTURE.md
     ├── WAYSOFWORKING.md
     ├── HANDOFF.md
     ├── PROVENANCE.md
@@ -77,53 +77,53 @@ your-project/
     └── CLAIMS_TRACKER.md           # (optional)
 ```
 
-**Templates** are the versioned reference — they never change per-project. **Generated files** (at the project-context/ root, plus AGENTS.md at the project root) are your project-specific living documents, maintained session to session. AGENTS.md is the only file at the project root — it's the universal entry point that tells any AI agent about the coordination system and the continuous improvement contract.
+**Templates** are the versioned reference — they never change per-project. **Generated files** are your project-specific living documents. AGENTS.md is the only file at the project root — the universal entry point that tells agents where the coordination files are and how to maintain them.
 
 ---
 
 ## The Files
 
-Eight templates, organized into tiers by how often agents should read them.
+Nine templates, organized by how often agents need them.
 
-### Tier 0 -- Root Entry Point
-
-| File | Purpose |
-|------|---------|
-| **AGENTS.md** | Lives at the **project root** (not in project-context/). Universal entry point for any AI agent. Contains the session protocol and continuous improvement contract — the instructions that make agents automatically maintain and improve all the other files as they work. |
-
-### Tier 1 -- Always Read (<1000 tokens combined)
+### Root Entry Point
 
 | File | Purpose |
 |------|---------|
-| **PROJECT_CONTEXT.md** | Current project state at a glance: phase, version, team, active milestone. Cheap to load, answers "where am I?" instantly. |
-| **GLOSSARY.md** | Terminology contract. "We say X, we mean Y, we do NOT mean Z." Prevents agents from silently substituting synonyms that blur important distinctions. |
+| **AGENTS.md** | Lives at the **project root**. Entry point for any AI agent. Session protocol (what to read, what to update) and continuous improvement contract (how to keep all other files growing). |
 
-### Tier 2 -- Read When Working
-
-| File | Purpose |
-|------|---------|
-| **STRUCTURE.md** | Directory layout, naming conventions, routing table ("I have X, where does it go?"). Prevents files from being created in wrong locations. |
-| **WAYSOFWORKING.md** | Session loop, proven workflows, named failure patterns (symptom/cause/fix), verification commands, error recovery protocol. The operational playbook. |
-| **HANDOFF.md** | Session continuity. What happened last, what's blocked, what to do next. Rewritten at the end of every session. Highest-impact single file if you adopt only one. |
-
-### Tier 3 -- Read When Investigating
+### Tier 1 — Always Read (<1000 tokens combined)
 
 | File | Purpose |
 |------|---------|
-| **PROVENANCE.md** | Decision journal. Why things are the way they are, what alternatives were considered, what was tried and abandoned. Prevents agents from re-proposing rejected approaches. |
-| **EXPERIMENT_JOURNAL.md** | Scientific record. Hypothesis before results, raw data in tables, root cause analysis, running summary. Prevents confabulation. |
+| **PROJECT_CONTEXT.md** | Current project state at a glance: phase, version, team, active milestone. |
+| **GLOSSARY.md** | Terminology contract. "We say X, we mean Y, we do NOT mean Z." |
 
-### Extension -- Optional
+### Tier 2 — Read When Working
 
 | File | Purpose |
 |------|---------|
-| **CLAIMS_TRACKER.md** | Patent/IP tracking. Claims, prior art maps, prosecution timeline. Only for projects heading toward filings. |
+| **STRUCTURE.md** | Directory layout, naming conventions, routing table ("I have X, where does it go?"). |
+| **WAYSOFWORKING.md** | Session loop, proven workflows, named failure patterns (symptom/cause/fix), verification commands. |
+| **HANDOFF.md** | Session continuity. What happened last, what's blocked, what to do next. Rewritten every session. |
+
+### Tier 3 — Read When Investigating
+
+| File | Purpose |
+|------|---------|
+| **PROVENANCE.md** | Decision journal. Why things are the way they are, what was tried and abandoned. |
+| **EXPERIMENT_JOURNAL.md** | Scientific record. Hypothesis before results, raw data, root cause analysis. |
+
+### Extension — Optional
+
+| File | Purpose |
+|------|---------|
+| **CLAIMS_TRACKER.md** | Patent/IP tracking. Claims, prior art maps, prosecution timeline. |
 
 ---
 
 ## Why It Works
 
-These files aren't organized by topic -- they're organized by **cognitive mode**. Each maps to a different kind of thinking an agent does:
+These files are organized by **cognitive mode**, not by topic. Each maps to a different kind of thinking an agent does:
 
 | File | Thinking Mode | Agent's Question |
 |------|--------------|-----------------|
@@ -135,23 +135,20 @@ These files aren't organized by topic -- they're organized by **cognitive mode**
 | HANDOFF | Session continuity | "What just happened?" |
 | PROVENANCE | Causal reasoning | "Why was it done this way?" |
 | EXPERIMENT_JOURNAL | Scientific reasoning | "What was tried?" |
-| CLAIMS_TRACKER | Strategic reasoning | "What do we protect?" |
 
-This means agents load **only the context relevant to their current task** instead of a monolithic README. Less noise in the context window, more accurate behavior, and knowledge that compounds across sessions instead of evaporating.
+Agents load only the context relevant to their current task. Less noise, more accurate behavior, and knowledge that compounds across sessions instead of evaporating.
 
 **Three mechanisms drive the compounding:**
 
 1. **The terminology table** (GLOSSARY.md) acts as a type system for natural language. The "Does NOT Mean" column constrains interpretation the way a type signature constrains code.
 
-2. **Named failure patterns** (WAYSOFWORKING.md) create institutional memory. An agent in session 12 benefits from the pain of session 3 without repeating it.
+2. **Named failure patterns** (WAYSOFWORKING.md) create institutional memory. An agent in session 12 benefits from session 3's pain without repeating it.
 
-3. **Feedback loops** between files: experiments produce findings, findings inform decisions (PROVENANCE), decisions shape procedures (WAYSOFWORKING), procedures guide better experiments.
+3. **The continuous improvement contract** (AGENTS.md) makes the system self-maintaining. Agents update files as they work — no human prompting required.
 
 ---
 
 ## Maintaining the Files
-
-The value depends entirely on keeping them current. Stale context is worse than no context.
 
 | File | When to Update |
 |------|---------------|
@@ -165,37 +162,38 @@ The value depends entirely on keeping them current. Stale context is worse than 
 | EXPERIMENT_JOURNAL.md | After every experiment |
 | CLAIMS_TRACKER.md | When claims evolve |
 
-**Rule of thumb:** If you'd re-explain it to a new team member, it belongs in one of these files.
+---
+
+## Platform Compatibility
+
+`AGENTS.md` is the [cross-platform standard](https://agents.md/) for AI agent instructions, stewarded by the Agentic AI Foundation under the Linux Foundation. It's natively supported by most AI coding tools.
+
+| Platform | Reads AGENTS.md? | Notes |
+|----------|-----------------|-------|
+| **Amplifier** | Yes | Native |
+| **OpenAI Codex** | Yes | Originated the convention |
+| **GitHub Copilot** | Yes | Also reads CLAUDE.md and .github/copilot-instructions.md |
+| **Cursor** | Yes | Also reads .cursorrules |
+| **Windsurf** | Yes | Auto-scoped by directory |
+| **Claude Code** | No — reads CLAUDE.md | Symlink: `ln -s AGENTS.md CLAUDE.md` |
+| **Aider** | Via config | Add `read: AGENTS.md` to `.aider.conf.yml` |
+
+For repos used across multiple platforms, `AGENTS.md` is the canonical file. Symlink or copy for tools that need their own filename.
 
 ---
 
 ## Updating Templates
 
-This repo is versioned with [semantic versioning](https://semver.org/). To get template updates:
+This repo uses [semantic versioning](https://semver.org/). To get template updates:
 
 ```bash
-# If cloned directly
-cd project-context && git pull
-
-# If using a submodule
-git submodule update --remote project-context
+cd project-context && git pull        # If cloned directly
+git submodule update --remote project-context  # If submodule
 ```
 
-Template updates don't affect your generated files. Templates are the schema; your generated files are the instances. If a new template version adds a section you want, manually add it to your generated file or re-run the setup prompt (it will consolidate existing content).
+Template updates don't affect your generated files. Re-run the setup prompt to incorporate new template features.
 
-See [CHANGELOG.md](CHANGELOG.md) for what changed per version.
-
----
-
-## Future
-
-This is currently a set of templates. Planned evolution:
-
-- **Amplifier skill** -- loadable via `load_skill()` for automatic discovery
-- **Amplifier bundle** -- context injection with agent directives and tiered auto-loading
-- **Agent-maintained updates** -- agents automatically update coordination files as they work
-
-Contributions and feedback welcome via issues.
+See [CHANGELOG.md](CHANGELOG.md) for version history.
 
 ---
 

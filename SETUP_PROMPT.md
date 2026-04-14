@@ -44,38 +44,53 @@ project-context/, and AGENTS.md at the project root. Do not modify
 anything inside project-context/templates/.
 ```
 
-Then add Tier 2 files when you're ready:
+---
 
+## After Setup
+
+### Claude Code users
+
+Claude Code reads `CLAUDE.md`, not `AGENTS.md`. Create a symlink so both work:
+
+```bash
+ln -s AGENTS.md CLAUDE.md
 ```
-Read project-context/templates/STRUCTURE.md, project-context/templates/WAYSOFWORKING.md,
-and project-context/templates/HANDOFF.md. Scan the codebase and any existing docs
-(CONTRIBUTING guides, architecture docs, decision logs) and generate customized versions
-inside project-context/, consolidating relevant existing content into the new format.
+
+### Aider users
+
+Add the coordination files to your Aider config:
+
+```yaml
+# .aider.conf.yml
+read:
+  - AGENTS.md
+  - project-context/PROJECT_CONTEXT.md
+  - project-context/GLOSSARY.md
 ```
+
+### All platforms
+
+Commit the generated files (AGENTS.md + everything in project-context/) to your repo so they persist across clones.
 
 ---
 
-## Session Start Prompt
-
-Use this at the beginning of every session after setup is complete:
+## Session Start
 
 ```
-Read project-context/PROJECT_CONTEXT.md and project-context/GLOSSARY.md before
-starting any work. Check project-context/HANDOFF.md for what happened last session
-and what to do next.
+Read project-context/PROJECT_CONTEXT.md and project-context/GLOSSARY.md
+before starting any work. Check project-context/HANDOFF.md for what
+happened last session and what to do next.
 ```
 
-_(If AGENTS.md is at the project root, most AI agents will read it automatically — you may not need to say this.)_
+_(If AGENTS.md is at the project root, most agents read it automatically — you may not need to say this.)_
 
 ---
 
-## Session End Prompt
-
-Use this before ending any session:
+## Session End
 
 ```
 Update project-context/HANDOFF.md with what we accomplished this session,
-what's blocked, and what the next session should start with. Be specific.
-Update any other coordination files that changed (see the Continuous
-Improvement Contract in AGENTS.md).
+what's blocked, and what the next session should start with. Update any
+other coordination files that changed (see the continuous improvement
+contract in AGENTS.md).
 ```

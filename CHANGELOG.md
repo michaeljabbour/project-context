@@ -9,6 +9,15 @@ This project uses [Semantic Versioning](https://semver.org/):
 
 ---
 
+## [2.2.0] - 2026-04-13
+
+### Changed
+- **AGENTS.md template streamlined**: 105 lines → 51 lines. Removed YAML frontmatter (no platform needs it), HTML comment directives, redundant file reference table (already in PROJECT_CONTEXT.md), and cross-platform notes (moved to repo README). What remains: session protocol + continuous improvement contract — the content that matters.
+- **README rewritten**: Added platform compatibility table (Amplifier, Codex, Claude Code, Cursor, Windsurf, GitHub Copilot, Aider), cross-platform guidance, Claude Code symlink instructions. Tighter structure.
+- **SETUP_PROMPT.md updated**: Includes Claude Code symlink step and Aider config note in post-setup section.
+
+---
+
 ## [2.1.0] - 2026-04-13
 
 ### Added
