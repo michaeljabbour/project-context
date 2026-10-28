@@ -1,3 +1,11 @@
+# Project Handoff is the current continuity entry
+
+Use [Project Handoff](https://michaeljabbour.github.io/amplifier-skill-project-handoff/) for Capture, Resume and Check. [Source and installation](https://github.com/michaeljabbour/amplifier-skill-project-handoff).
+
+This repository is retained as an archived reference. Its original setup prompt, nine coordination templates and MIT notice remain intact; the complete fourteen-file snapshot is also preserved in Project Handoff's optional coordination reference. Existing project files and source-pinned installs stay usable.
+
+---
+
 # Project Context
 
 Markdown templates that give AI agents persistent project memory across sessions.
